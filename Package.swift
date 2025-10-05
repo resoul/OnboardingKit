@@ -25,9 +25,5 @@ let package = Package(
                 .product(name: "AsyncDisplayKit", package: "AsyncDisplayKit")
             ]
         ),
-        .testTarget(
-            name: "PreviewIntroTests",
-            dependencies: ["PreviewIntro"]
-        ),
     ]
 )

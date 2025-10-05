@@ -6,7 +6,7 @@ public protocol PreviewIntroViewModel {
     var currentPreview: AnyPublisher<PreviewIntro?, Never> { get }
 
     func getPreview() -> PreviewIntro
-    func startPreview()
+    func startPreview(completion: ((_ complete: @escaping () -> Void) -> Void)?)
 }
 
 public class PreviewIntroViewModelImpl: PreviewIntroViewModel {
@@ -14,6 +14,7 @@ public class PreviewIntroViewModelImpl: PreviewIntroViewModel {
     private let currentPreviewSubject = CurrentValueSubject<PreviewIntro?, Never>(nil)
     private var cancellables = Set<AnyCancellable>()
     private let previewItems: [PreviewIntro]
+    private let defaultDelay: TimeInterval
 
     public var isLoading: AnyPublisher<Bool, Never> {
         isLoadingSubject.eraseToAnyPublisher()
@@ -31,15 +32,23 @@ public class PreviewIntroViewModelImpl: PreviewIntroViewModel {
         return item
     }
 
-    public func startPreview() {
+    public func startPreview(completion: ((_ complete: @escaping () -> Void) -> Void)? = nil) {
         currentPreviewSubject.send(getPreview())
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            self?.isLoadingSubject.send(false)
+        
+        if let completion = completion {
+            completion { [weak self] in
+                self?.isLoadingSubject.send(false)
+            }
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + defaultDelay) { [weak self] in
+                self?.isLoadingSubject.send(false)
+            }
         }
     }
 
-    public init (items: [PreviewIntro] = []) {
+    public init (items: [PreviewIntro] = [], delay: TimeInterval = 1.5) {
         previewItems = items
+        defaultDelay = delay
     }
 
     deinit {
