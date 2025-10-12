@@ -1,5 +1,13 @@
 import UIKit
 
+public enum PreviewTransitionStyle {
+    case fade
+    case slide
+    case scale
+    case slideFromBottom
+    case custom((PreviewIntroNode, @escaping () -> Void) -> Void)
+}
+
 public struct PreviewIntro {
     let headline: String
     let description: String
@@ -9,6 +17,8 @@ public struct PreviewIntro {
     let headlineFont: UIFont
     let descriptionColor: UIColor
     let descriptionFont: UIFont
+    let transitionStyle: PreviewTransitionStyle
+    let animationDuration: TimeInterval
 
     public init(
         headline: String,
@@ -18,7 +28,9 @@ public struct PreviewIntro {
         headlineColor: UIColor = .label,
         headlineFont: UIFont = .systemFont(ofSize: 30, weight: .bold),
         descriptionColor: UIColor = .label,
-        descriptionFont: UIFont = .systemFont(ofSize: 20, weight: .regular)
+        descriptionFont: UIFont = .systemFont(ofSize: 20, weight: .regular),
+        transitionStyle: PreviewTransitionStyle = .fade,
+        animationDuration: TimeInterval = 0.8
     ) {
         self.headline = headline
         self.description = description
@@ -28,5 +40,7 @@ public struct PreviewIntro {
         self.headlineFont = headlineFont
         self.descriptionColor = descriptionColor
         self.descriptionFont = descriptionFont
+        self.transitionStyle = transitionStyle
+        self.animationDuration = animationDuration
     }
 }

@@ -9,6 +9,23 @@ public protocol PreviewIntroViewModel {
     func startPreview(completion: ((_ complete: @escaping () -> Void) -> Void)?)
 }
 
+public enum PreviewIntroError: LocalizedError {
+    case emptyItems
+    case invalidDelay
+    case invalidAnimationDuration(TimeInterval)
+
+    public var errorDescription: String? {
+        switch self {
+        case .emptyItems:
+            return "PreviewIntro items cannot be empty. Please provide at least one item."
+        case .invalidDelay:
+            return "Delay must be a positive value greater than 0."
+        case .invalidAnimationDuration(let duration):
+            return "Animation duration must be between 0.1 and 5.0 seconds. Provided: \(duration)"
+        }
+    }
+}
+
 public class PreviewIntroViewModelImpl: PreviewIntroViewModel {
     private let isLoadingSubject = CurrentValueSubject<Bool, Never>(true)
     private let currentPreviewSubject = CurrentValueSubject<PreviewIntro?, Never>(nil)
@@ -46,9 +63,33 @@ public class PreviewIntroViewModelImpl: PreviewIntroViewModel {
         }
     }
 
+    private func validateItems(_ items: [PreviewIntro]) throws {
+        guard !items.isEmpty else {
+            throw PreviewIntroError.emptyItems
+        }
+
+        for item in items {
+            if item.animationDuration < 0.1 || item.animationDuration > 5.0 {
+                throw PreviewIntroError.invalidAnimationDuration(item.animationDuration)
+            }
+        }
+    }
+
+    private func validateDelay(_ delay: TimeInterval) throws {
+        guard delay > 0 else {
+            throw PreviewIntroError.invalidDelay
+        }
+    }
+
     public init (items: [PreviewIntro] = [], delay: TimeInterval = 1.5) {
-        previewItems = items
-        defaultDelay = delay
+        do {
+            try validateItems(items)
+            try validateDelay(delay)
+            self.previewItems = items
+            self.defaultDelay = delay
+        } catch {
+            fatalError("PreviewIntroViewModel initialization failed: \(error.localizedDescription)")
+        }
     }
 
     deinit {

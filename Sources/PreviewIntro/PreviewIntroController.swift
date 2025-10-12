@@ -42,7 +42,7 @@ open class PreviewIntroController: UIViewController {
 
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.startPreview()
+        viewModel.startPreview(completion: nil)
     }
 
     public init(viewModel: PreviewIntroViewModel, viewNode: PreviewIntroNode) {
