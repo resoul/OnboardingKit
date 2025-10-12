@@ -82,11 +82,11 @@ public class PreviewIntroViewModelImpl: PreviewIntroViewModel {
     }
 
     public init (items: [PreviewIntro] = [], delay: TimeInterval = 1.5) {
+        self.previewItems = items
+        self.defaultDelay = delay
         do {
             try validateItems(items)
             try validateDelay(delay)
-            self.previewItems = items
-            self.defaultDelay = delay
         } catch {
             fatalError("PreviewIntroViewModel initialization failed: \(error.localizedDescription)")
         }
