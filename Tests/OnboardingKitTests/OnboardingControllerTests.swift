@@ -38,7 +38,7 @@ final class OnboardingControllerTests: XCTestCase {
     func testDelegateCalledOnLoadingChange() {
         let expectation = expectation(description: "Delegate called")
         
-        mockDelegate.onHandlePreviewCompletion = { isLoading in
+        mockDelegate.onHandleOnboardCompletion = { isLoading in
             XCTAssertFalse(isLoading)
             expectation.fulfill()
         }
