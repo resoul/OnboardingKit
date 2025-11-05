@@ -1,69 +1,165 @@
-# PreviewIntro
+# OnboardingKit
 
-**PreviewIntro** is a Swift Package for building beautiful intro/preview screens on iOS,  
-powered by **AsyncDisplayKit (Texture)** and Combine.
+<p align="center">
+  <img src="https://img.shields.io/badge/Swift-5.5+-orange.svg" />
+  <img src="https://img.shields.io/badge/iOS-13.0+-blue.svg" />
+  <img src="https://img.shields.io/badge/SPM-compatible-brightgreen.svg" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+</p>
 
-## Features
-- Lightweight DTO model `PreviewIntro` with default styles.
-- `PreviewIntroNode` based on **ASDisplayNode** with animations.
-- `PreviewIntroViewModel` using Combine for reactive state management.
+**OnboardingKit** is a modern, flexible iOS library for creating beautiful onboarding experiences. Built with UIKit, Texture (AsyncDisplayKit), and Combine, it provides smooth animations and customizable intro screens for your app.
 
-## Installation
+## ✨ Features
 
-Add the package dependency to your `Package.swift`:
+- 🎨 **Fully Customizable** - Colors, fonts, images, and animations
+- 🔄 **Multiple Transition Styles** - Fade, slide, scale, and custom animations
+- 📱 **Modern Architecture** - MVVM pattern with Combine framework
+- 🚀 **High Performance** - Built on Texture for smooth 60fps animations
+- 🎯 **Type-Safe** - Full Swift type safety with comprehensive error handling
+- 🧩 **Easy Integration** - Simple SPM installation and minimal setup
+- ♿️ **Accessible** - Support for Dynamic Type and accessibility features
+
+## 📦 Installation
+
+### Swift Package Manager
+
+Add OnboardingKit to your project via Xcode or by adding it to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/resoul/PreviewIntro.git", from: "0.1.1")
+    .package(url: "https://github.com/resoul/OnboardingKit.git", from: "0.2.0")
 ]
 ```
-## Usage
+
+Or in Xcode:
+1. File → Add Packages...
+2. Enter repository URL
+3. Select version and add to your target
+
+## 🚀 Quick Start
+
+### Basic Usage
 
 ```swift
-import PreviewIntro
+import OnboardingKit
 
-let previews = [
-    PreviewIntro(
-        headline: "Welcome",
-        description: "This is the first intro screen with fade animation",
-        image: UIImage(named: "intro1"),
-        transitionStyle: .fade,
-        animationDuration: 0.8
+// Create onboarding screens
+let screens = [
+    OnboardingScreen(
+        headline: "Welcome to MyApp",
+        description: "Discover amazing features that will change your life",
+        image: UIImage(named: "welcome"),
+        transitionStyle: .fade
     ),
-    PreviewIntro(
-        headline: "Discover",
-        description: "Explore amazing features with slide animation",
-        image: UIImage(named: "intro2"),
-        transitionStyle: .slide,
-        animationDuration: 1.0
+    OnboardingScreen(
+        headline: "Stay Connected",
+        description: "Connect with friends and family instantly",
+        image: UIImage(named: "connect"),
+        transitionStyle: .slide
     ),
-    PreviewIntro(
+    OnboardingScreen(
         headline: "Get Started",
-        description: "Begin your journey with scale animation",
-        image: UIImage(named: "intro3"),
-        transitionStyle: .scale,
-        animationDuration: 0.9
-    ),
-    PreviewIntro(
-        headline: "Custom",
-        description: "Custom animation example",
-        image: UIImage(named: "intro4"),
-        transitionStyle: .custom { node, completion in
-            // Your custom animation logic
-            UIView.animate(withDuration: 1.0) {
-                // Animate node
-            } completion: { _ in
-                completion()
-            }
-        },
-        animationDuration: 1.0
+        description: "Let's begin your journey together",
+        image: UIImage(named: "start"),
+        transitionStyle: .scale
     )
 ]
 
-let viewModel = PreviewIntroViewModelImpl(items: previews, delay: 2.0)
-let node = PreviewIntroNode()
+// Create view model
+let viewModel = OnboardingViewModelImpl(items: screens, delay: 2.5)
 
-let c = PreviewIntroController(viewModel: viewModel, viewNode: node)
-present(c, animated: true)
+// Create and present controller
+let onboardingVC = OnboardingController(
+    viewModel: viewModel,
+    viewNode: OnboardingNode()
+)
+onboardingVC.delegate = self
 
+present(onboardingVC, animated: true)
+```
+
+### Handle Completion
+
+```swift
+extension YourViewController: OnboardingDelegate {
+    func handleOnboardingCompletion(isLoading: Bool) {
+        if !isLoading {
+            // Onboarding finished
+            dismiss(animated: true) {
+                // Navigate to main app
+                self.showMainScreen()
+            }
+        }
+    }
+}
+```
+
+## 🎨 Customization
+
+### Custom Colors and Fonts
+
+```swift
+let screen = OnboardingScreen(
+    headline: "Beautiful Design",
+    description: "Customize every aspect",
+    image: UIImage(named: "design"),
+    backgroundColor: .systemIndigo,
+    headlineColor: .white,
+    headlineFont: .boldSystemFont(ofSize: 32),
+    descriptionColor: .systemGray6,
+    descriptionFont: .systemFont(ofSize: 18, weight: .regular),
+    transitionStyle: .fade,
+    animationDuration: 1.0
+)
+```
+
+### Transition Styles
+
+OnboardingKit supports multiple built-in transition styles:
+
+```swift
+// Fade in/out
+.fade
+
+// Slide from right
+.slide
+
+// Scale up
+.scale
+
+// Slide from bottom
+.slideFromBottom
+
+// Custom animation
+.custom { node, completion in
+    UIView.animate(withDuration: 0.5, animations: {
+        node.alpha = 0
+        node.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+    }) { _ in
+        completion()
+    }
+}
+```
+
+### Advanced Configuration
+
+```swift
+let viewModel = OnboardingViewModelImpl(
+    items: screens,
+    delay: 3.0 // Auto-advance delay in seconds
+)
+
+// With custom completion handler
+viewModel.startPreview { complete in
+    // Perform async task
+    self.loadUserData { success in
+        if success {
+            complete() // Move to next screen
+        }
+    }
+}
+```
+Run tests:
+```bash
+swift test
 ```

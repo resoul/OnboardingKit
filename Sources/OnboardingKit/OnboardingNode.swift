@@ -1,12 +1,12 @@
 import AsyncDisplayKit
 
-public final class PreviewIntroNode: ASDisplayNode {
+public final class OnboardingNode: ASDisplayNode {
     private let headlineTextNode = ASTextNode()
     private let backgroundImageNode = ASImageNode()
     private let descriptionTextNode = ASTextNode()
-    private var currentPreview: PreviewIntro?
+    private var currentPreview: OnboardingScreen?
 
-    public func configure(with preview: PreviewIntro) {
+    public func configure(with preview: OnboardingScreen) {
         currentPreview = preview
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .justified
@@ -33,7 +33,7 @@ public final class PreviewIntroNode: ASDisplayNode {
         applyTransition(style: preview.transitionStyle, duration: preview.animationDuration)
     }
 
-    private func applyTransition(style: PreviewTransitionStyle, duration: TimeInterval) {
+    private func applyTransition(style: OnboardingTransitionStyle, duration: TimeInterval) {
         switch style {
         case .fade:
             animateFade(duration: duration)

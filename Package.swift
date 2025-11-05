@@ -1,15 +1,15 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.7
 import PackageDescription
 
 let package = Package(
-    name: "PreviewIntro",
+    name: "OnboardingKit",
     platforms: [
         .iOS(.v14),
     ],
     products: [
         .library(
-            name: "PreviewIntro",
-            targets: ["PreviewIntro"]
+            name: "OnboardingKit",
+            targets: ["OnboardingKit"]
         ),
     ],
     dependencies: [
@@ -20,10 +20,14 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "PreviewIntro",
+            name: "OnboardingKit",
             dependencies: [
                 .product(name: "AsyncDisplayKit", package: "AsyncDisplayKit")
             ]
         ),
+        .testTarget(
+            name: "OnboardingKitTests",
+            dependencies: ["OnboardingKit", "AsyncDisplayKit"]
+        )
     ]
 )

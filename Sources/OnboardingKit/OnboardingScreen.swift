@@ -1,14 +1,6 @@
 import UIKit
 
-public enum PreviewTransitionStyle {
-    case fade
-    case slide
-    case scale
-    case slideFromBottom
-    case custom((PreviewIntroNode, @escaping () -> Void) -> Void)
-}
-
-public struct PreviewIntro {
+public struct OnboardingScreen {
     let headline: String
     let description: String
     let image: UIImage?
@@ -17,7 +9,7 @@ public struct PreviewIntro {
     let headlineFont: UIFont
     let descriptionColor: UIColor
     let descriptionFont: UIFont
-    let transitionStyle: PreviewTransitionStyle
+    let transitionStyle: OnboardingTransitionStyle
     let animationDuration: TimeInterval
 
     public init(
@@ -29,7 +21,7 @@ public struct PreviewIntro {
         headlineFont: UIFont = .systemFont(ofSize: 30, weight: .bold),
         descriptionColor: UIColor = .label,
         descriptionFont: UIFont = .systemFont(ofSize: 20, weight: .regular),
-        transitionStyle: PreviewTransitionStyle = .fade,
+        transitionStyle: OnboardingTransitionStyle = .fade,
         animationDuration: TimeInterval = 0.8
     ) {
         self.headline = headline

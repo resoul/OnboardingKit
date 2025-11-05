@@ -1,15 +1,11 @@
 import UIKit
 import Combine
 
-public protocol PreviewIntroDelegate: AnyObject {
-    func handlePreviewCompletion(isLoading: Bool)
-}
-
-open class PreviewIntroController: UIViewController {
+open class OnboardingController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
-    public weak var delegate: PreviewIntroDelegate?
-    private let viewModel: PreviewIntroViewModel
-    private let viewNode: PreviewIntroNode
+    public weak var delegate: OnboardingDelegate?
+    private let viewModel: OnboardingViewModel
+    private let viewNode: OnboardingNode
 
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +27,7 @@ open class PreviewIntroController: UIViewController {
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoading in
-                self?.delegate?.handlePreviewCompletion(isLoading: isLoading)
+                self?.delegate?.handleOnboardCompletion(isLoading: isLoading)
             }
             .store(in: &cancellables)
     }
@@ -45,7 +41,7 @@ open class PreviewIntroController: UIViewController {
         viewModel.startPreview(completion: nil)
     }
 
-    public init(viewModel: PreviewIntroViewModel, viewNode: PreviewIntroNode) {
+    public init(viewModel: OnboardingViewModel, viewNode: OnboardingNode) {
         self.viewModel = viewModel
         self.viewNode = viewNode
         super.init(nibName: nil, bundle: nil)
