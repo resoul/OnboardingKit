@@ -4,15 +4,15 @@ import Combine
 
 final class OnboardingControllerTests: XCTestCase {
     var sut: OnboardingController!
-    var mockViewModel: MockPreviewIntroViewModel!
+    var mockViewModel: MockOnboardingViewModel!
     var mockNode: OnboardingNode!
-    var mockDelegate: MockPreviewIntroDelegate!
+    var mockDelegate: MockOnboardingDelegate!
     
     override func setUp() {
         super.setUp()
-        mockViewModel = MockPreviewIntroViewModel()
+        mockViewModel = MockOnboardingViewModel()
         mockNode = OnboardingNode()
-        mockDelegate = MockPreviewIntroDelegate()
+        mockDelegate = MockOnboardingDelegate()
         sut = OnboardingController(viewModel: mockViewModel, viewNode: mockNode)
         sut.delegate = mockDelegate
     }
